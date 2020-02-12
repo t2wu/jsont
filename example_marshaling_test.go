@@ -36,7 +36,7 @@ func (a *Animal) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (a Animal) MarshalJSON() ([]byte, error) {
+func (a Animal) MarshalJSON(fieldsTE F) ([]byte, error) {
 	var s string
 	switch a {
 	default:

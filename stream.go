@@ -93,7 +93,7 @@ func (enc *Encoder) SetEscapeHTML(on bool) {
 type RawMessage []byte
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m RawMessage) MarshalJSON() ([]byte, error) {
+func (m RawMessage) MarshalJSON(fieldsTE F) ([]byte, error) {
 	if m == nil {
 		return []byte("null"), nil
 	}

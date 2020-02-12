@@ -14,7 +14,7 @@ package main
 import (
     "fmt"
 
-    "github.com/JuanTorr/jsont"
+    "github.com/t2wu/jsont"
 )
 
 //Only the id's and structs are marked as default
@@ -83,7 +83,7 @@ package main
 import (
     "fmt"
 
-    "github.com/JuanTorr/jsont"
+    "github.com/t2wu/jsont"
 )
 
 type user struct {
@@ -184,7 +184,7 @@ import (
     "log"
     "net/http"
 
-    "github.com/JuanTorr/jsont"
+    "github.com/t2wu/jsont"
 )
 
 type SearchResult struct {

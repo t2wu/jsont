@@ -242,7 +242,7 @@ func HTMLEscape(dst *bytes.Buffer, src []byte) {
 // Marshaler is the interface implemented by types that
 // can marshal themselves into valid JSON.
 type Marshaler interface {
-	MarshalJSON() ([]byte, error)
+	MarshalJSON(F) ([]byte, error)
 }
 
 // An UnsupportedTypeError is returned by Marshal when attempting
@@ -472,7 +472,7 @@ func marshalerEncoder(e *encodeState, v reflect.Value, opts encOpts, fieldsTE F)
 		e.WriteString("null")
 		return
 	}
-	b, err := m.MarshalJSON()
+	b, err := m.MarshalJSON(fieldsTE)
 	if err == nil {
 		// copy JSON into buffer, checking validity.
 		err = compact(&e.Buffer, b, opts.escapeHTML)
@@ -482,14 +482,14 @@ func marshalerEncoder(e *encodeState, v reflect.Value, opts encOpts, fieldsTE F)
 	}
 }
 
-func addrMarshalerEncoder(e *encodeState, v reflect.Value, _ encOpts, _ F) {
+func addrMarshalerEncoder(e *encodeState, v reflect.Value, _ encOpts, fieldsTE F) {
 	va := v.Addr()
 	if va.IsNil() {
 		e.WriteString("null")
 		return
 	}
 	m := va.Interface().(Marshaler)
-	b, err := m.MarshalJSON()
+	b, err := m.MarshalJSON(fieldsTE)
 	if err == nil {
 		// copy JSON into buffer, checking validity.
 		err = compact(&e.Buffer, b, true)

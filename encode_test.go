@@ -124,7 +124,7 @@ func TestUnsupportedValues(t *testing.T) {
 // Ref has Marshaler and Unmarshaler methods with pointer receiver.
 type Ref int
 
-func (*Ref) MarshalJSON() ([]byte, error) {
+func (*Ref) MarshalJSON(fieldsTE F) ([]byte, error) {
 	return []byte(`"ref"`), nil
 }
 
@@ -136,7 +136,7 @@ func (r *Ref) UnmarshalJSON([]byte) error {
 // Val has Marshaler methods with value receiver.
 type Val int
 
-func (Val) MarshalJSON() ([]byte, error) {
+func (Val) MarshalJSON(fieldsTE F) ([]byte, error) {
 	return []byte(`"val"`), nil
 }
 
@@ -192,7 +192,7 @@ func TestRefValMarshal(t *testing.T) {
 // C implements Marshaler and returns unescaped JSON.
 type C int
 
-func (C) MarshalJSON() ([]byte, error) {
+func (C) MarshalJSON(fieldsTE F) ([]byte, error) {
 	return []byte(`"<&>"`), nil
 }
 
@@ -426,7 +426,7 @@ type BugX struct {
 // as long as it implements MarshalJSON, it should be marshaled.
 type nilMarshaler string
 
-func (nm *nilMarshaler) MarshalJSON() ([]byte, error) {
+func (nm *nilMarshaler) MarshalJSON(fieldsTE F) ([]byte, error) {
 	if nm == nil {
 		return Marshal("0zenil0", nil)
 	}
@@ -691,15 +691,15 @@ func TestEncodeString(t *testing.T) {
 
 type jsonbyte byte
 
-func (b jsonbyte) MarshalJSON() ([]byte, error) { return tenc(`{"JB":%d}`, b) }
+func (b jsonbyte) MarshalJSON(fieldsTE F) ([]byte, error) { return tenc(`{"JB":%d}`, b) }
 
 type textbyte byte
 
-func (b textbyte) MarshalText() ([]byte, error) { return tenc(`TB:%d`, b) }
+func (b textbyte) MarshalText(fieldsTE F) ([]byte, error) { return tenc(`TB:%d`, b) }
 
 type jsonint int
 
-func (i jsonint) MarshalJSON() ([]byte, error) { return tenc(`{"JI":%d}`, i) }
+func (i jsonint) MarshalJSON(fieldsTE F) ([]byte, error) { return tenc(`{"JI":%d}`, i) }
 
 type textint int
 
@@ -849,7 +849,7 @@ func TestMarshalFloat(t *testing.T) {
 
 type marshalPanic struct{}
 
-func (marshalPanic) MarshalJSON() ([]byte, error) { panic(0xdead) }
+func (marshalPanic) MarshalJSON(fieldsTE F) ([]byte, error) { panic(0xdead) }
 
 func TestMarshalPanic(t *testing.T) {
 	defer func() {
